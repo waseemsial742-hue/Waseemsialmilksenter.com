@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WaseemSial Milk Collection Center — Milk Accounts</title>
+<style>
+:root{--b:#174b91;--d:#0d3267;--g:#159447;--r:#c93535;--bg:#f4f8fc;--card:#fff;--mut:#65778c}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Nastaliq Urdu",sans-serif;background:var(--bg);color:#18385f;line-height:1.6}
+header{background:linear-gradient(135deg,var(--d),var(--b));color:#fff;padding:14px 5%;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:800}.brand img{width:55px;height:55px;border-radius:12px;object-fit:cover;background:#fff}
+nav{display:flex;gap:7px;flex-wrap:wrap}nav button{border:0;background:transparent;color:#fff;padding:9px 12px;border-radius:9px;font-weight:700;cursor:pointer}nav button.active,nav button:hover{background:#ffffff25}
+main{max-width:1250px;margin:auto;padding:24px 4%}.page{display:none}.page.active{display:block}
+.hero{background:#fff;border-radius:20px;padding:25px;margin-bottom:20px;box-shadow:0 8px 25px #174b9110}.hero h1{margin:0;color:var(--d)}.hero p{color:var(--mut)}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin:18px 0}.card{background:var(--card);padding:20px;border-radius:16px;box-shadow:0 7px 22px #174b9110;border:1px solid #e2ebf4}.card h3{margin:0 0 6px}.big{font-size:28px;font-weight:800;color:var(--d)}.green{color:var(--g)}.red{color:var(--r)}
+.panel{background:#fff;padding:22px;border-radius:17px;box-shadow:0 7px 22px #174b9110;margin-bottom:20px}.panel h2{margin-top:0;color:var(--d)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.field label{display:block;font-weight:700;margin-bottom:5px}.field input,.field select{width:100%;padding:11px;border:1px solid #cbd9e8;border-radius:9px;font-size:15px}
+.btn{border:0;border-radius:9px;padding:11px 17px;font-weight:700;cursor:pointer}.primary{background:var(--b);color:#fff}.success{background:var(--g);color:#fff}.danger{background:var(--r);color:#fff}.light{background:#edf4fb;color:var(--d)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+table{width:100%;border-collapse:collapse;margin-top:15px;background:#fff}th,td{padding:10px;border-bottom:1px solid #e6edf4;text-align:right}th{background:#edf4fb;color:var(--d)}
+.notice{background:#fff8df;border-right:4px solid #e1aa18;padding:12px;border-radius:8px;margin-bottom:15px}
+.empty{text-align:center;color:var(--mut);padding:25px}
+footer{text-align:center;padding:25px;color:#6b7c8f}
+@media(max-width:850px){.cards{grid-template-columns:repeat(2,1fr)}header{flex-wrap:wrap}nav{width:100%;overflow:auto}.grid{grid-template-columns:1fr}table{font-size:13px}}
+@media(max-width:520px){.cards{grid-template-columns:1fr}.brand span{display:none}.hero h1{font-size:25px}}
+</style>
+</head>
+<body>
+<header>
+<a class="brand" href="#" onclick="show('home');return false"><img src="logo.png" alt="WaseemSial logo"><span>WaseemSial Milk Collection Center</span></a>
+<nav>
+<button id="nav-home" onclick="show('home')">Dashboard</button>
+<button id="nav-purchase" onclick="show('purchase')">Milk Purchase</button>
+<button id="nav-sale" onclick="show('sale')">Milk Sale</button>
+<button id="nav-rate" onclick="show('rate')">Milk Rate</button>
+<button id="nav-ledger" onclick="show('ledger')">Hisaab / Ledger</button>
+</nav>
+</header>
+
+<main>
+<section id="home" class="page active">
+<div class="hero"><h1>Milk Stock & Sale Purchase Hisaab</h1><p>روزانہ دودھ کی خرید، فروخت، ریٹ، اسٹاک اور رقم کا مکمل حساب ایک ہی جگہ۔</p></div>
+<div class="cards">
+<div class="card"><h3>آج کی خرید</h3><div id="todayPurchase" class="big">0 L</div><small id="todayPurchaseRs">Rs 0</small></div>
+<div class="card"><h3>آج کی فروخت</h3><div id="todaySale" class="big">0 L</div><small id="todaySaleRs">Rs 0</small></div>
+<div class="card"><h3>موجودہ اسٹاک</h3><div id="stock" class="big green">0 L</div><small>کل خرید − کل فروخت</small></div>
+<div class="card"><h3>موجودہ ریٹ</h3><div id="rateDisplay" class="big">Rs 0/L</div><small>Milk purchase rate</small></div>
+</div>
+<div class="panel"><h2>Quick Actions</h2><div class="actions">
+<button class="btn success" onclick="show('purchase')">+ دودھ خرید درج کریں</button>
+<button class="btn primary" onclick="show('sale')">+ دودھ فروخت درج کریں</button>
+<button class="btn light" onclick="show('rate')">ریٹ تبدیل کریں</button>
+<button class="btn light" onclick="show('ledger')">مکمل حساب دیکھیں</button>
+</div></div>
+<div class="notice">⚠️ یہ حساب اسی browser/device میں محفوظ ہوتا ہے۔ Browser کا data clear کرنے یا device بدلنے سے پہلے Export Backup ضرور لے لیں۔</div>
+<div class="panel"><h2>Backup</h2><p>اپنا پورا حساب JSON فائل میں محفوظ کریں یا پہلے سے محفوظ backup واپس لائیں۔</p><div class="actions"><button class="btn primary" onclick="backup()">Export Backup</button><label class="btn light">Import Backup <input id="restore" type="file" accept=".json" onchange="restore(event)" hidden></label><button class="btn danger" onclick="clearAll()">تمام حساب حذف کریں</button></div></div>
+</section>
+
+<section id="purchase" class="page">
+<div class="panel"><h2>🥛 Milk Purchase — دودھ کی خرید</h2>
+<div class="grid">
+<div class="field"><label>تاریخ</label><input id="pDate" type="date"></div>
+<div class="field"><label>سپلائر / کسان کا نام</label><input id="pPerson" placeholder="مثلاً Muhammad Ali"></div>
+<div class="field"><label>مقدار (Liter)</label><input id="pQty" type="number" min="0" step="0.01"></div>
+<div class="field"><label>Rate (Rs/L)</label><input id="pRate" type="number" min="0" step="0.01"></div>
+</div>
+<div class="actions"><button class="btn success" onclick="addPurchase()">Purchase Save کریں</button><button class="btn light" onclick="fillPurchaseRate()">Current Rate لگائیں</button></div></div>
+<div class="panel"><h2>Purchase Records</h2><div id="purchaseTable"></div></div>
+</section>
+
+<section id="sale" class="page">
+<div class="panel"><h2>🚚 Milk Sale — دودھ کی فروخت</h2>
+<div class="grid">
+<div class="field"><label>تاریخ</label><input id="sDate" type="date"></div>
+<div class="field"><label>Customer / Buyer</label><input id="sPerson" placeholder="خریدار کا نام"></div>
+<div class="field"><label>مقدار (Liter)</label><input id="sQty" type="number" min="0" step="0.01"></div>
+<div class="field"><label>Sale Rate (Rs/L)</label><input id="sRate" type="number" min="0" step="0.01"></div>
+</div>
+<div class="actions"><button class="btn primary" onclick="addSale()">Sale Save کریں</button></div></div>
+<div class="panel"><h2>Sale Records</h2><div id="saleTable"></div></div>
+</section>
+
+<section id="rate" class="page">
+<div class="panel"><h2>💰 Milk Rate — دودھ کا ریٹ</h2>
+<p>یہ ریٹ نئی purchase entries میں automatically استعمال ہوگا، لیکن پرانے records کا rate تبدیل نہیں ہوگا۔</p>
+<div class="grid"><div class="field"><label>Purchase Rate (Rs/L)</label><input id="newRate" type="number" min="0" step="0.01"></div><div class="field"><label>Sale Rate (Rs/L)</label><input id="newSaleRate" type="number" min="0" step="0.01"></div></div>
+<div class="actions"><button class="btn success" onclick="saveRates()">Rates Save کریں</button></div></div>
+</section>
+
+<section id="ledger" class="page">
+<div class="panel"><h2>📒 مکمل Hisaab / Ledger</h2>
+<div class="cards">
+<div class="card"><h3>Total Purchase</h3><div id="totalP" class="big">0 L</div><small id="totalPRs">Rs 0</small></div>
+<div class="card"><h3>Total Sale</h3><div id="totalS" class="big">0 L</div><small id="totalSRs">Rs 0</small></div>
+<div class="card"><h3>Stock</h3><div id="ledgerStock" class="big green">0 L</div></div>
+<div class="card"><h3>Gross Difference</h3><div id="gross" class="big">Rs 0</div><small>Sale amount − Purchase amount</small></div>
+</div>
+<div id="ledgerTable"></div>
+</div>
+</section>
+</main>
+<footer>© 2026 WaseemSial Milk Collection Center — Shorkot City</footer>
+
+<script>
+const KEY="waseemsial_milk_accounts_v1";
+let data=JSON.parse(localStorage.getItem(KEY)||'{"purchases":[],"sales":[],"rates":{"purchase":0,"sale":0}}');
+const today=()=>new Date().toISOString().slice(0,10);
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function money(n){return "Rs "+Number(n||0).toLocaleString("en-PK",{maximumFractionDigits:2})}
+function qty(n){return Number(n||0).toLocaleString("en-PK",{maximumFractionDigits:2})+" L"}
+function show(id){
+ document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
+ let b=document.getElementById("nav-"+id); if(b)b.classList.add("active");
+ render();
+}
+function addPurchase(){
+ let date=document.getElementById("pDate").value||today(), person=document.getElementById("pPerson").value.trim()||"Cash Supplier";
+ let q=+document.getElementById("pQty").value, r=+document.getElementById("pRate").value;
+ if(q<=0||r<0)return alert("Quantity اور rate درست درج کریں۔");
+ data.purchases.push({id:Date.now(),date,person,q,r,total:q*r});save();
+ ["pPerson","pQty"].forEach(id=>document.getElementById(id).value="");
+}
+function addSale(){
+ let date=document.getElementById("sDate").value||today(), person=document.getElementById("sPerson").value.trim()||"Cash Customer";
+ let q=+document.getElementById("sQty").value, r=+document.getElementById("sRate").value;
+ let stock=data.purchases.reduce((a,x)=>a+x.q,0)-data.sales.reduce((a,x)=>a+x.q,0);
+ if(q<=0||r<0)return alert("Quantity اور rate درست درج کریں۔");
+ if(q>stock)return alert("اتنا milk stock موجود نہیں۔ Current stock: "+qty(stock));
+ data.sales.push({id:Date.now(),date,person,q,r,total:q*r});save();
+ ["sPerson","sQty"].forEach(id=>document.getElementById(id).value="");
+}
+function del(type,id){if(!confirm("یہ record delete کرنا ہے؟"))return;data[type]=data[type].filter(x=>x.id!==id);save()}
+function fillPurchaseRate(){document.getElementById("pRate").value=data.rates.purchase||""}
+function saveRates(){data.rates.purchase=+document.getElementById("newRate").value||0;data.rates.sale=+document.getElementById("newSaleRate").value||0;save();alert("Rates save ہوگئے۔")}
+function rows(arr,type){
+ if(!arr.length)return '<div class="empty">ابھی کوئی record موجود نہیں۔</div>';
+ return '<table><thead><tr><th>تاریخ</th><th>نام</th><th>Liter</th><th>Rate</th><th>Amount</th><th>Action</th></tr></thead><tbody>'+
+ arr.slice().reverse().map(x=>`<tr><td>${x.date}</td><td>${escapeHtml(x.person)}</td><td>${x.q.toFixed(2)}</td><td>${money(x.r)}</td><td>${money(x.total)}</td><td><button class="btn danger" onclick="del('${type}',${x.id})">Delete</button></td></tr>`).join("")+'</tbody></table>'
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function render(){
+ document.getElementById("pDate").value ||= today(); document.getElementById("sDate").value ||= today();
+ document.getElementById("pRate").value ||= data.rates.purchase||"";
+ document.getElementById("sRate").value ||= data.rates.sale||"";
+ document.getElementById("newRate").value=data.rates.purchase||"";
+ document.getElementById("newSaleRate").value=data.rates.sale||"";
+ let tp=data.purchases.reduce((a,x)=>a+x.q,0), ts=data.sales.reduce((a,x)=>a+x.q,0);
+ let tpr=data.purchases.reduce((a,x)=>a+x.total,0), tsr=data.sales.reduce((a,x)=>a+x.total,0);
+ let dp=data.purchases.filter(x=>x.date===today()), ds=data.sales.filter(x=>x.date===today());
+ document.getElementById("todayPurchase").textContent=qty(dp.reduce((a,x)=>a+x.q,0));
+ document.getElementById("todayPurchaseRs").textContent=money(dp.reduce((a,x)=>a+x.total,0));
+ document.getElementById("todaySale").textContent=qty(ds.reduce((a,x)=>a+x.q,0));
+ document.getElementById("todaySaleRs").textContent=money(ds.reduce((a,x)=>a+x.total,0));
+ document.getElementById("stock").textContent=qty(tp-ts);document.getElementById("ledgerStock").textContent=qty(tp-ts);
+ document.getElementById("rateDisplay").textContent=money(data.rates.purchase)+"/L";
+ document.getElementById("purchaseTable").innerHTML=rows(data.purchases,"purchases");
+ document.getElementById("saleTable").innerHTML=rows(data.sales,"sales");
+ document.getElementById("totalP").textContent=qty(tp);document.getElementById("totalPRs").textContent=money(tpr);
+ document.getElementById("totalS").textContent=qty(ts);document.getElementById("totalSRs").textContent=money(tsr);
+ document.getElementById("gross").textContent=money(tsr-tpr);
+ document.getElementById("ledgerTable").innerHTML=rows([...data.purchases.map(x=>({...x,type:"Purchase"})),...data.sales.map(x=>({...x,type:"Sale"}))].sort((a,b)=>a.date.localeCompare(b.date)),"__none");
+}
+function backup(){
+ let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}), a=document.createElement("a");
+ a.href=URL.createObjectURL(blob);a.download="waseemsial-milk-backup-"+today()+".json";a.click();URL.revokeObjectURL(a.href)
+}
+function restore(e){
+ let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.purchases||!x.sales||!x.rates)throw 0;data=x;save();alert("Backup restore ہوگیا۔")}catch(_){alert("Backup file درست نہیں۔")}};r.readAsText(f)
+}
+function clearAll(){if(confirm("تمام purchase, sale اور rates delete ہو جائیں گے۔ جاری رکھیں؟")){data={purchases:[],sales:[],rates:{purchase:0,sale:0}};save()}}
+render();
+</script>
+</body>
+</html>
